@@ -1,0 +1,83 @@
+// TABLE
+.tableFixHead {
+    overflow: auto;
+    max-height: 500px; // To show sticky header
+    border: 2px solid #333;
+}
+
+.table {
+    margin-bottom: 0;
+
+    & > :not(:first-child) {
+        border-top: none;
+    }
+    
+    th {
+        text-align: left;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #abddf9;
+        border-bottom: 2px solid #333;
+    }
+
+    tr {
+        td {
+            font-weight: bold;
+            vertical-align: middle;
+            font-size: 0.8rem;
+            background: #fff;
+
+            &.center {
+                text-align: center;
+            }
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+
+            button {
+                font-weight: bold;
+                text-decoration: none;
+                font-size: 1rem;
+
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+        }
+
+        &:hover td {
+            color: #d0433c;
+            background: #f2f2f2;
+        }
+
+        &.selected td {
+            background: #d0433c;
+            color: #fff;
+
+            button {
+                color: #fff;
+            }
+        }
+    }
+}
+
+// SIDEBAR
+.offcanvas {
+    width: 33%;
+    .offcanvas-header {
+        h3 {
+            margin-top: 1rem;
+            line-height: 1;
+            color: #0d6efd;
+        }
+
+        .btn-close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+    }
+}
