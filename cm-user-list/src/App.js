@@ -2,71 +2,64 @@ import './main.scss'
 import { useState, useEffect } from 'react'
 import logo from './img/logo.png'
 import axios from 'axios'
-import { Offcanvas, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import UserTable from './components/UserTable'
+import Sidebar from './components/Sidebar'
 
 const App = () => {
-    // isMounted to prevent the error: Warning: Can't perform a React state update on an unmounted component.
-    let isMounted = true
     const [usersList, setUsersList] = useState([])
     const [userDetail, setUserDetail] = useState()
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [editableForm, setEditableForm] = useState(false)
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-    const handleClose = () => setIsMenuOpen(false)
-    const handleShow = (id) => {
-        setIsMenuOpen(true)
-        setUserDetail(usersList.find((x) => x.id === id))
+    const resetUsers = () => {
+        localStorage.setItem('localUsers', null)
+        axios.get('https://jsonplaceholder.typicode.com/users').then((res) => {
+            setUsersList(res.data)
+            saveUsersLocally(res.data)
+        })
     }
 
-    const editForm = () => {
-        setEditableForm(true)
+    const saveUsersLocally = (arr) => {
+        localStorage.setItem('localUsers', JSON.stringify(arr))
+    }
+
+    const deleteUser = (id) => {
+        const removeIndex = usersList.findIndex((x) => x.id === id)
+        setUsersList((usersList) => {
+            return usersList.splice(removeIndex, 1)
+        })
+        saveUsersLocally(usersList)
+        setIsSidebarOpen(false)
     }
 
     useEffect(() => {
-        axios.get('https://jsonplaceholder.typicode.com/users').then((res) => {
-            if (isMounted) setUsersList(res.data)
-        })
-        return () => {
-            isMounted = false
+        const localStorageUsers = JSON.parse(localStorage.getItem('localUsers'))
+        if (localStorageUsers && localStorageUsers.length > 0) {
+            setUsersList(localStorageUsers)
+        } else {
+            axios
+                .get('https://jsonplaceholder.typicode.com/users')
+                .then((res) => {
+                    setUsersList(res.data)
+                    saveUsersLocally(res.data)
+                })
         }
-    }, [])
+    }, [usersList.length])
+
+    const handleClose = () => setIsSidebarOpen(false)
+    const handleShow = (id) => {
+        setIsSidebarOpen(true)
+        setUserDetail(usersList.find((x) => x.id === id))
+    }
 
     return (
         <div className='App'>
-            <Offcanvas show={isMenuOpen} onHide={handleClose} placement='end'>
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>
-                        User detail{' '}
-                        {userDetail && (
-                            <h3 className='display-3'>{userDetail.name}</h3>
-                        )}
-                    </Offcanvas.Title>
-                </Offcanvas.Header>
-                {userDetail && (
-                    <Offcanvas.Body>
-                        <form>
-                            <fieldset disabled={!editableForm}>
-                                <div className='mb-3'>
-                                    <label className='form-label'>Name</label>
-                                    <input
-                                        type='email'
-                                        className='form-control'
-                                        id='exampleFormControlInput1'
-                                        defaultValue={userDetail.name}
-                                    />
-                                </div>
-                            </fieldset>
-                            <div className='my-5'>
-                                <Button variant='secondary' onClick={editForm}>
-                                    Edit details
-                                </Button>
-                            </div>
-                        </form>
-                    </Offcanvas.Body>
-                )}
-            </Offcanvas>
-
+            <Sidebar
+                user={userDetail}
+                closeModal={handleClose}
+                sidebarOpen={isSidebarOpen}
+                removeUser={deleteUser}
+            />
             <nav className='navbar navbar-light bg-light'>
                 <div className='container'>
                     <a
@@ -81,7 +74,10 @@ const App = () => {
             <main>
                 <div className='container'>
                     <h1 className='display-5'>
-                        <Button variant='outline-primary' size='sm'>
+                        <Button
+                            variant='outline-primary'
+                            size='sm'
+                            onClick={resetUsers}>
                             Reset users
                         </Button>
                         User List{' '}
@@ -97,7 +93,7 @@ const App = () => {
                         <UserTable
                             userData={usersList}
                             openModalHandler={handleShow}
-                            deselect={isMenuOpen}
+                            deselect={isSidebarOpen}
                         />
                     </div>
                 </div>

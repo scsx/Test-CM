@@ -13,14 +13,14 @@ const UserTable = (props) => {
     const highlightTr = (id) => {
         props.openModalHandler(id)
         setUserSelected(id)
-        //console.log(props.deselect)
     }
 
     useEffect(() => {
+        console.log(props)
         if (!props.deselect) {
             setUserSelected(null)
         }
-    })
+    }, [])
 
     return (
         <Table>
