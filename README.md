@@ -26,3 +26,6 @@ Displays users
 
 ### Sidebar.js
 Shows user details and allows editing them or delete the user; the form could be a separate component but prop drilling was to be avoided
+
+### Preview
+![preview.png](preview.png)
