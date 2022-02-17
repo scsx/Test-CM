@@ -16,11 +16,10 @@ const UserTable = (props) => {
     }
 
     useEffect(() => {
-        console.log(props)
         if (!props.deselect) {
             setUserSelected(null)
         }
-    }, [])
+    }, [props.deselect])
 
     return (
         <Table>

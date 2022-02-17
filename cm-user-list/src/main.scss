@@ -31,6 +31,10 @@ h1 {
     .btn-outline-primary {
         float: right;
         margin-top: 1.5rem;
+
+        &:focus {
+            box-shadow: none;
+        }
     }
 }
 
@@ -40,5 +44,9 @@ h1 {
             height: 50px;
             margin-top: 10px;
         }
+    }
+
+    .text-muted {
+        text-decoration: none;
     }
 }

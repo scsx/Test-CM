@@ -1,24 +1,44 @@
 import { useState, useEffect } from 'react'
 import { Offcanvas, ButtonGroup, Button, Accordion } from 'react-bootstrap'
 import axios from 'axios'
-import Form from './Form'
 import TasksList from './TasksList'
 
 const Sidebar = (props) => {
+    const [userInfo, setUserInfo] = useState()
     const [editableForm, setEditableForm] = useState(false)
     const [tasksCompleted, setTasksCompleted] = useState([])
+
+    const [inputs, setInputs] = useState()
+
+    // const user = props.user
 
     const toggleEditForm = () => {
         setEditableForm((editableForm) => !editableForm)
     }
 
     const formEditingHandler = (i, e) => {
-        console.log(i, e)
+        let formData = [...inputs]
+        formData[i][e.target.name] = e.target.value
+        setInputs(formData)
+        console.log(inputs)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
     }
+
+    // Manage fields
+    useEffect(() => {
+        if (userInfo) {
+            setUserInfo(props.user)
+            console.log(userInfo)
+            var result = Object.entries(userInfo)
+
+            //setInputs(Object.keys(user))
+            setInputs(result)
+            console.log(inputs)
+        }
+    }, [userInfo])
 
     // Get tasks
     useEffect(() => {
@@ -48,11 +68,38 @@ const Sidebar = (props) => {
                     )}
                 </Offcanvas.Title>
             </Offcanvas.Header>
-            {props.user && (
+            {userInfo && (
                 <Offcanvas.Body>
-                    <form action=''>
-                        <Form data={props.user} editable={editableForm} />
+                    <form onSubmit={handleSubmit}>
+                        <fieldset disabled={!editableForm}>
+                            {inputs &&
+                                inputs.map((input, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <input
+                                                name={input[0]}
+                                                defaultValue={input[0]}
+                                                onChange={(event) =>
+                                                    formEditingHandler(
+                                                        index,
+                                                        event
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    )
+                                })}
 
+                            {/* <div className='mb-3'>
+                                <label className='form-label'>Name</label>
+                                <input
+                                    type='text'
+                                    className='form-control'
+                                    id='exampleFormControlInput1'
+                                    defaultValue={user.name}
+                                />
+                            </div> */}
+                        </fieldset>
                         <div className='my-5'>
                             {!editableForm && (
                                 <ButtonGroup>
@@ -64,7 +111,7 @@ const Sidebar = (props) => {
                                     <Button
                                         variant='danger'
                                         onClick={() => {
-                                            props.removeUser(props.user.id)
+                                            props.removeUser(userInfo.id)
                                         }}>
                                         Delete user
                                     </Button>
@@ -93,6 +140,7 @@ const Sidebar = (props) => {
                             )}
                         </div>
                     </form>
+
                     <TasksList tasks={tasksCompleted} />
                 </Offcanvas.Body>
             )}

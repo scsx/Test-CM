@@ -1,7 +1,7 @@
 import './main.scss'
 import { useState, useEffect } from 'react'
-import logo from './img/logo.png'
 import axios from 'axios'
+import logo from './img/logo.png'
 import { Button } from 'react-bootstrap'
 import UserTable from './components/UserTable'
 import Sidebar from './components/Sidebar'
@@ -41,7 +41,6 @@ const App = () => {
                 .get('https://jsonplaceholder.typicode.com/users')
                 .then((res) => {
                     setUsersList(res.data)
-                    saveUsersLocally(res.data)
                 })
         }
     }, [usersList.length])
@@ -68,6 +67,12 @@ const App = () => {
                         target='_blank'>
                         <img src={logo} className='logo' alt='logo' />
                         Teste Jorge Soucasaux Monteiro
+                    </a>
+                    <a
+                    className='text-muted'
+                        href='https://github.com/scsx/Test-CM'
+                        target='_blank'>
+                        repo
                     </a>
                 </div>
             </nav>

@@ -11,7 +11,7 @@
     & > :not(:first-child) {
         border-top: none;
     }
-    
+
     th {
         text-align: left;
         position: sticky;
@@ -66,7 +66,12 @@
 
 // SIDEBAR
 .offcanvas {
-    width: 33%;
+    width: 33.33%;
+
+    @media (max-width: 991px) {
+        width: 80%;
+    }
+
     .offcanvas-header {
         h3 {
             margin-top: 1rem;
@@ -78,6 +83,35 @@
             position: absolute;
             right: 1rem;
             top: 1rem;
+        }
+    }
+}
+
+// SIDEBAR TASKS
+.accordion {
+    .accordion-button {
+        font-weight: 700;
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:not(.collapsed) {
+            background-color: #e7e7e7;
+        }
+    }
+
+    ul li {
+        text-transform: capitalize;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        padding-left: 0.5rem;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: -0.5rem;
+            content: '- ';
         }
     }
 }
