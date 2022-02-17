@@ -16,7 +16,7 @@ const App = () => {
     const saveUsersLocally = (arr) => {
         localStorage.setItem('localUsers', JSON.stringify(arr))
     }
-    
+
     const resetUsers = () => {
         localStorage.setItem('localUsers', null)
         axios.get('https://jsonplaceholder.typicode.com/users').then((res) => {
@@ -25,16 +25,20 @@ const App = () => {
         })
     }
 
+    const updateUserListActions = (id, action) => {
+        saveUsersLocally(usersList)
+        setMsg(`User #${id} has been ${action}`)
+        setShowMsg(true)
+        setIsSidebarOpen(false)
+    }
+
     const updateUser = (data) => {
         let newUsers = usersList
         let removeIndex = newUsers.findIndex((x) => x.id === data.id)
         newUsers.splice(removeIndex, 1, data)
 
         setUsersList(newUsers)
-        saveUsersLocally(usersList)
-        setMsg(`User #${data.id} has been updated`)
-        setShowMsg(true)
-        setIsSidebarOpen(false)
+        updateUserListActions(data.id, 'updated')
     }
 
     const deleteUser = (id) => {
@@ -42,10 +46,7 @@ const App = () => {
         setUsersList((usersList) => {
             return usersList.splice(removeIndex, 1)
         })
-        saveUsersLocally(usersList)
-        setMsg('User deleted')
-        setShowMsg(true)
-        setIsSidebarOpen(false)
+        updateUserListActions(id, 'deleted')
     }
 
     useEffect(() => {
