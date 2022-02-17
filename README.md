@@ -25,7 +25,10 @@ Gets and manages data for users using `localStorage`; allows refresh users
 Displays users
 
 ### Sidebar.js
-Shows user details and allows editing them or delete the user; the form could be a separate component but prop drilling was to be avoided
+Shows user details and allows deleting the user
+
+### Usertable.js
+Alllows editing the user
 
 ### Preview
 ![preview.png](preview.png)
