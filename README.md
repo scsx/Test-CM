@@ -5,7 +5,8 @@
     - Avatar is not provided by [typicode](s https://jsonplaceholder.typicode.com/users), two were created
     - `hasCompany` as boolean is always true (all users have company); name was displayed instead
 - Basic functionalities
-    - All  user details can be edited except avatar and tasks (to keep simplicity, the form has no validation or feedback of any kind)
+    - All user details can be edited except avatar and tasks (to keep simplicity, the form has no validation or feedback of any kind)
+    -  Also, address can't be edited but technically it's similar to `company`.
 - Bonus
     - This document serves as a simple documentation
 

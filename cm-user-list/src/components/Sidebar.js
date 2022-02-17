@@ -1,24 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Offcanvas, ButtonGroup, Button, Accordion } from 'react-bootstrap'
+import { Offcanvas } from 'react-bootstrap'
 import axios from 'axios'
-import Form from './Form'
+import UserForm from './UserForm'
 import TasksList from './TasksList'
 
 const Sidebar = (props) => {
-    const [editableForm, setEditableForm] = useState(false)
     const [tasksCompleted, setTasksCompleted] = useState([])
-
-    const toggleEditForm = () => {
-        setEditableForm((editableForm) => !editableForm)
-    }
-
-    const formEditingHandler = (i, e) => {
-        console.log(i, e)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-    }
 
     // Get tasks
     useEffect(() => {
@@ -35,6 +22,23 @@ const Sidebar = (props) => {
         }
     }, [props.user])
 
+    let address = null
+    if (props.user) {
+        let ad = props.user.address
+        address = (
+            <div className='address'>
+                <span>
+                    {ad.street}, {ad.suite}
+                </span>
+                <br />
+                <span>
+                    {ad.zipcode}, {ad.city} (
+                    {ad.geo.lat}, {ad.geo.lng})
+                </span>
+            </div>
+        )
+    }
+
     return (
         <Offcanvas
             show={props.sidebarOpen}
@@ -42,57 +46,17 @@ const Sidebar = (props) => {
             placement='end'>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title>
-                    User detail{' '}
                     {props.user && (
-                        <h3 className='display-5'>{props.user.name}</h3>
+                        <>
+                            <h3 className='display-5'>{props.user.name}</h3>
+                            {address}
+                        </>
                     )}
                 </Offcanvas.Title>
             </Offcanvas.Header>
             {props.user && (
                 <Offcanvas.Body>
-                    <form action=''>
-                        <Form data={props.user} editable={editableForm} />
-
-                        <div className='my-5'>
-                            {!editableForm && (
-                                <ButtonGroup>
-                                    <Button
-                                        variant='primary'
-                                        onClick={toggleEditForm}>
-                                        Edit details
-                                    </Button>
-                                    <Button
-                                        variant='danger'
-                                        onClick={() => {
-                                            props.removeUser(props.user.id)
-                                        }}>
-                                        Delete user
-                                    </Button>
-                                </ButtonGroup>
-                            )}
-                            {editableForm && (
-                                <>
-                                    <ButtonGroup>
-                                        <Button variant='success' type='submit'>
-                                            Save changes
-                                        </Button>
-                                        <Button
-                                            variant='outline-secondary'
-                                            onClick={toggleEditForm}>
-                                            Cancel
-                                        </Button>
-                                    </ButtonGroup>
-                                    <p className='mt-3'>
-                                        <b className='d-block'>Note</b>
-                                        <i>
-                                            To keep simplicity, this form has no
-                                            validation or feedback of any kind.
-                                        </i>
-                                    </p>
-                                </>
-                            )}
-                        </div>
-                    </form>
+                    <UserForm data={props.user} updateUser={props.updateUser} deleteUser={props.removeUser} />
                     <TasksList tasks={tasksCompleted} />
                 </Offcanvas.Body>
             )}

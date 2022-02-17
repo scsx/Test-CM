@@ -2,7 +2,7 @@ import './main.scss'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import logo from './img/logo.png'
-import { Button } from 'react-bootstrap'
+import { Button, Alert } from 'react-bootstrap'
 import UserTable from './components/UserTable'
 import Sidebar from './components/Sidebar'
 
@@ -10,7 +10,13 @@ const App = () => {
     const [usersList, setUsersList] = useState([])
     const [userDetail, setUserDetail] = useState()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [msg, setMsg] = useState('Some message')
+    const [showMsg, setShowMsg] = useState(false)
 
+    const saveUsersLocally = (arr) => {
+        localStorage.setItem('localUsers', JSON.stringify(arr))
+    }
+    
     const resetUsers = () => {
         localStorage.setItem('localUsers', null)
         axios.get('https://jsonplaceholder.typicode.com/users').then((res) => {
@@ -19,8 +25,16 @@ const App = () => {
         })
     }
 
-    const saveUsersLocally = (arr) => {
-        localStorage.setItem('localUsers', JSON.stringify(arr))
+    const updateUser = (data) => {
+        let newUsers = usersList
+        let removeIndex = newUsers.findIndex((x) => x.id === data.id)
+        newUsers.splice(removeIndex, 1, data)
+
+        setUsersList(newUsers)
+        saveUsersLocally(usersList)
+        setMsg(`User #${data.id} has been updated`)
+        setShowMsg(true)
+        setIsSidebarOpen(false)
     }
 
     const deleteUser = (id) => {
@@ -29,6 +43,8 @@ const App = () => {
             return usersList.splice(removeIndex, 1)
         })
         saveUsersLocally(usersList)
+        setMsg('User deleted')
+        setShowMsg(true)
         setIsSidebarOpen(false)
     }
 
@@ -58,6 +74,7 @@ const App = () => {
                 closeModal={handleClose}
                 sidebarOpen={isSidebarOpen}
                 removeUser={deleteUser}
+                updateUser={updateUser}
             />
             <nav className='navbar navbar-light bg-light'>
                 <div className='container'>
@@ -69,7 +86,7 @@ const App = () => {
                         Teste Jorge Soucasaux Monteiro
                     </a>
                     <a
-                    className='text-muted'
+                        className='text-muted'
                         href='https://github.com/scsx/Test-CM'
                         target='_blank'>
                         repo
@@ -78,6 +95,18 @@ const App = () => {
             </nav>
             <main>
                 <div className='container'>
+                    {showMsg && (
+                        <Alert
+                            variant='ghost'
+                            onClose={() => setShowMsg(false)}
+                            dismissible>
+                            <Alert.Heading>{msg}</Alert.Heading>
+                            <p>
+                                You can now reload the page and it'll be
+                                permanent.
+                            </p>
+                        </Alert>
+                    )}
                     <h1 className='display-5'>
                         <Button
                             variant='outline-primary'

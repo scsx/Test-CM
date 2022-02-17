@@ -41,6 +41,8 @@
                 font-weight: bold;
                 text-decoration: none;
                 font-size: 1rem;
+                text-align: left;
+                line-height: 1.1;
 
                 &:focus {
                     box-shadow: none;
@@ -66,7 +68,7 @@
 
 // SIDEBAR
 .offcanvas {
-    width: 33.33%;
+    width: 66.66%;
 
     @media (max-width: 991px) {
         width: 80%;
@@ -74,15 +76,54 @@
 
     .offcanvas-header {
         h3 {
-            margin-top: 1rem;
+            margin-top: 0;
             line-height: 1;
             color: #0d6efd;
+        }
+
+        .address {
+            font-size: 0.8rem;
+            padding-bottom: 1rem;
         }
 
         .btn-close {
             position: absolute;
             right: 1rem;
             top: 1rem;
+        }
+    }
+
+    .offcanvas-body {
+        background: #e7e7e7;
+    }
+}
+
+// SIDEBAR FORM
+.userform {
+    fieldset {
+        display: flex;
+        flex-wrap: wrap;
+
+        .formfield {
+            margin-bottom: 1rem;
+            width: 48%;
+
+            &:nth-child(odd) {
+                margin-right: 3%;
+            }
+
+            label {
+                margin-bottom: 0.25rem;
+                font-weight: 700;
+            }
+
+            .form-control:disabled {
+                background-color: transparent;
+                opacity: 1;
+                cursor: crosshair;
+                padding: 0.25rem 0;
+                border: none;
+            }
         }
     }
 }
@@ -97,7 +138,7 @@
         }
 
         &:not(.collapsed) {
-            background-color: #e7e7e7;
+            background-color: #fff;
         }
     }
 

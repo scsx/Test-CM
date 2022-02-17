@@ -2,17 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap');
 @import 'scss/components';
 
-$primaryColor: #333;
-
 body {
-    color: $primaryColor;
+    color: #333;
     font-family: 'Red Hat Display', sans-serif;
 
     background: #e7e7e7;
 }
 
 main {
-    padding: 2rem 0;
+    padding: 0 0 2rem 0;
 }
 
 h1 {
@@ -48,5 +46,16 @@ h1 {
 
     .text-muted {
         text-decoration: none;
+    }
+}
+
+.alert-ghost {
+    margin: 2rem 0 0 0;
+    border: 2px solid #333;
+    background-color: #e8f7ff;
+    display: inline-block;
+
+    .alert-heading {
+        font-weight: 700;
     }
 }
